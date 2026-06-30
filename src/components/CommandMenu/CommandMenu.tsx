@@ -67,7 +67,7 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
         </div>
       )}
 
-      <ul className="flex flex-col gap-1">
+      <ul className="flex flex-col gap-1" role="group">
         {items.map((item, index) => {
           const isSelected = index === selectedIndex;
           const cursor = showCursor && isSelected ? '▶' : '\u00A0';

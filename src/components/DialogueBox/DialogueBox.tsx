@@ -73,6 +73,7 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
   return (
     <div
       role="dialog"
+      aria-label={message.speaker ? `${message.speaker}: ${message.text}` : message.text}
       aria-live="polite"
       tabIndex={0}
       onClick={skipOnClick ? handleClick : undefined}

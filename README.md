@@ -13,11 +13,12 @@ Built for game developers, narrative web experiences, and anyone who wants their
 ## ✨ Features
 
 - **64 planned components** across 10 categories: atoms, layout, forms, data display, feedback, and game-specific systems
-- **3 implemented**: `DialogueBox`, `CommandMenu`, `StatusPanel` — see [ROADMAP.md](./ROADMAP.md) for status
+- **9 implemented** — see [ROADMAP.md](./ROADMAP.md) for status
 - **HD-2D visual system**: parchment, gold trim, gem accents, subtle scanlines
 - **Keyboard-driven menus**: Arrow keys, Enter, Escape — just like the classics
-- **Accessible**: semantic roles, keyboard navigation, focus management
+- **Accessible**: semantic roles, keyboard navigation, focus management, automated a11y audits
 - **TypeScript-first**: fully typed components and hooks
+- **Tested**: 82 tests covering hooks, components, and accessibility
 
 ## 🚀 Installation
 
@@ -116,24 +117,118 @@ pnpm storybook
 
 ## 📦 Components
 
-### ✅ Implemented (3/64)
+### ✅ Implemented (9/64)
 
 | Component | Category | Description |
 |---|---|---|
 | `DialogueBox` | Game Systems | Typewriter dialogue with speaker, portrait, and continue prompts |
 | `CommandMenu` | Navigation | Vertical JRPG menu with full keyboard navigation |
 | `StatusPanel` | Data Display | Character status card with HP/MP/XP bars |
+| `GemButton` | Atoms | Gem-styled button with press animation, 4 accent variants |
+| `PixelText` | Atoms | Pixel-font text with configurable variant and color |
+| `DisplayText` | Atoms | Serif display font for titles with gold accent underline |
+| `OrnateDivider` | Atoms | Decorated horizontal rule with gem/rune ornament |
+| `RuneIcon` | Atoms | 28 inline rune/glyph icons with gem-glow styling |
+| `PortraitAvatar` | Atoms | Character portrait with rarity-glow border |
 
-### 🔜 Next Up (Phase 1 — Atoms)
+### 🔜 Next Up (Phase 2 — Layout)
 
 | Component | Description |
 |---|---|
-| `GemButton` | Gem-styled button with press animation, 4 accent variants |
-| `PixelText` | Pixel-font text with typewriter support |
-| `DisplayText` | Serif display font for titles with gold accents |
-| `OrnateDivider` | Decorated horizontal rule with gem ornament |
-| `RuneIcon` | Inline rune/glyph icons (pure CSS, no library) |
-| `PortraitAvatar` | Character portrait with rarity-glow frame |
+| `FramePanel` | Base parchment container with gold double-border |
+| `SlotGrid` | CSS Grid wrapper for inventory/item slots |
+| `SplitPanel` | Resizable two-pane layout |
+| `TabSelector` | JRPG-style tabs with slide animation |
+| `ScrollPanel` | Scrollable panel with faded edge indicators |
+| `AccordionTome` | Expandable sections styled as a tome/book |
+
+## 🧪 Testing
+
+```bash
+npm test              # run all tests (CI mode)
+npm run test:watch    # watch mode for development
+npm run test:ui       # visual test runner UI
+npm run test:coverage # run with coverage report
+```
+
+### Test Stack
+
+| Tool | Purpose |
+|---|---|
+| [Vitest](https://vitest.dev) | Test runner — fast, Vite-native, same transform pipeline as the build |
+| [React Testing Library](https://testing-library.com/react) | Component tests from the user's perspective |
+| [jest-axe](https://github.com/nickcolley/jest-axe) | Automated accessibility audits per component |
+| [jsdom](https://github.com/jsdom/jsdom) | Browser-like DOM environment |
+
+### Test Pattern
+
+Every component follows this structure and testing pattern:
+
+```
+src/components/ComponentName/
+├── ComponentName.tsx          # Component source
+└── __tests__/
+    └── ComponentName.test.tsx # Tests
+```
+
+Each test file covers four areas:
+
+```tsx
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { axe } from 'jest-axe';
+import { YourComponent } from '../YourComponent';
+
+describe('YourComponent', () => {
+  // 1. Rendering — does it render all expected elements?
+  describe('rendering', () => {
+    it('renders children', () => { /* ... */ });
+    it('renders with different variants', () => { /* ... */ });
+  });
+
+  // 2. Interaction — do clicks/keyboard work correctly?
+  describe('interaction', () => {
+    it('calls onClick when clicked', async () => { /* ... */ });
+    it('responds to keyboard input', async () => { /* ... */ });
+  });
+
+  // 3. States — are loading, disabled, empty, error states correct?
+  describe('states', () => {
+    it('shows loading state', () => { /* ... */ });
+    it('disables interaction when disabled', () => { /* ... */ });
+  });
+
+  // 4. Accessibility — does it pass automated audit?
+  describe('accessibility', () => {
+    it('has no axe violations', async () => {
+      const { container } = render(<YourComponent />);
+      const results = await axe(container);
+      expect(results.violations).toHaveLength(0);
+    });
+  });
+});
+```
+
+### Hooks
+
+Pure logic hooks are tested with `renderHook` and fake timers:
+
+```
+src/hooks/
+├── useTypewriter.ts
+├── useKeyboardNavigation.ts
+└── __tests__/
+    ├── useTypewriter.test.ts
+    └── useKeyboardNavigation.test.ts
+```
+
+### Current Coverage
+
+- **82 tests** across 5 test files
+- 2 hooks tested (timing, edge cases, cleanup)
+- 3 interactive components tested (rendering, interaction, states, a11y)
+- Every component must pass `jest-axe` audit
 
 ## 🛣 Roadmap
 
