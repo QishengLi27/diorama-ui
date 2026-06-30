@@ -12,7 +12,8 @@ Built for game developers, narrative web experiences, and anyone who wants their
 
 ## ✨ Features
 
-- **JRPG-first components**: `DialogueBox`, `CommandMenu`, `StatusPanel`
+- **64 planned components** across 10 categories: atoms, layout, forms, data display, feedback, and game-specific systems
+- **3 implemented**: `DialogueBox`, `CommandMenu`, `StatusPanel` — see [ROADMAP.md](./ROADMAP.md) for status
 - **HD-2D visual system**: parchment, gold trim, gem accents, subtle scanlines
 - **Keyboard-driven menus**: Arrow keys, Enter, Escape — just like the classics
 - **Accessible**: semantic roles, keyboard navigation, focus management
@@ -115,23 +116,42 @@ pnpm storybook
 
 ## 📦 Components
 
-| Component | Description | Status |
+### ✅ Implemented (3/64)
+
+| Component | Category | Description |
 |---|---|---|
-| `DialogueBox` | Typewriter dialogue with speaker, portrait, and continue prompts | ✅ Implemented |
-| `CommandMenu` | Vertical JRPG menu with keyboard navigation | ✅ Implemented |
-| `StatusPanel` | Character status card with HP/MP/XP bars | ✅ Implemented |
+| `DialogueBox` | Game Systems | Typewriter dialogue with speaker, portrait, and continue prompts |
+| `CommandMenu` | Navigation | Vertical JRPG menu with full keyboard navigation |
+| `StatusPanel` | Data Display | Character status card with HP/MP/XP bars |
+
+### 🔜 Next Up (Phase 1 — Atoms)
+
+| Component | Description |
+|---|---|
+| `GemButton` | Gem-styled button with press animation, 4 accent variants |
+| `PixelText` | Pixel-font text with typewriter support |
+| `DisplayText` | Serif display font for titles with gold accents |
+| `OrnateDivider` | Decorated horizontal rule with gem ornament |
+| `RuneIcon` | Inline rune/glyph icons (pure CSS, no library) |
+| `PortraitAvatar` | Character portrait with rarity-glow frame |
 
 ## 🛣 Roadmap
 
-See [ROADMAP.md](./ROADMAP.md) for the full development plan.
+See [ROADMAP.md](./ROADMAP.md) for the full 64-component plan across 10 phases:
 
-High-level upcoming work:
-
-- [ ] `InventoryGrid` with rarity glow
-- [ ] `ShopPanel` buy/sell interface
-- [ ] `SaveFileCard` save slot UI
-- [ ] `WorldMapMarker` animated quest markers
-- [ ] Vue / Svelte wrappers
+| Phase | Focus | Components |
+|---|---|---|
+| 0 | Foundation | Tests, CI, a11y audits |
+| 1 | Atoms | GemButton, PixelText, DisplayText, OrnateDivider, RuneIcon, PortraitAvatar |
+| 2 | Layout | FramePanel, SlotGrid, SplitPanel, TabSelector, ScrollPanel, AccordionTome |
+| 3 | Forms | DioramaInput, DioramaSelect, ToggleGem, CheckboxRune, RadioRune, GemSlider, StatStepper, DioramaForm, SearchRune |
+| 4 | Data Display | ItemCard, InventoryGrid, RarityBadge, TooltipRune, ScrollList, SkillTree, DataTable, and more |
+| 5 | Feedback | ModalPanel, ConfirmDialog, ToastRune, AlertBanner, LoadingCrystal, SkeletonRune, and more |
+| 6 | Game Systems | ShopPanel, BattleMenu, TargetSelector, DamageNumber, DialogTree, QuestLog, BestiaryEntry, and more |
+| 7 | Theming | DioramaProvider, CSS variables, dark/light modes, component variants |
+| 8 | Interactions | Animations, sound hooks, transitions |
+| 9 | Advanced | CutsceneTimeline, MiniMap, CraftingPanel, TitleScreen, CodexBrowser |
+| 10 | Ecosystem | Vue/Svelte wrappers, Figma kit, community examples |
 
 ## 📄 License
 
