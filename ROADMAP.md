@@ -14,7 +14,7 @@
 - Designers and prototypers looking for Square-Enix-inspired components
 
 **Success looks like:**
-- A stable `v1.0` on npm with 8–10 high-quality components
+- A stable `v1.0` on npm with 60+ high-quality components across all UI categories
 - Full TypeScript support and accessible keyboard navigation
 - Storybook documentation with interactive examples
 - A small but clear visual identity and theming system
@@ -38,7 +38,7 @@
 
 ## 3. Phased Roadmap
 
-### Phase 0 — Foundation (now, ~1–2 weeks)
+### Phase 0 — Foundation (~1–2 weeks)
 *Goal: Make the existing library robust and professional enough to ship patch releases.*
 
 - [ ] Add automated tests
@@ -59,40 +59,267 @@
 - [ ] Documentation
   - Expand Storybook with all prop variations
   - Add usage examples for each component
-  - Write a short “Theming” guide
+  - Write a short "Theming" guide
 
 **Deliverable:** `v0.2.0` — stable, tested, documented foundation.
 
 ---
 
-### Phase 1 — Core JRPG Components (~2–4 weeks)
-*Goal: Cover the most common JRPG UI patterns.*
+### Phase 1 — General / Atoms (~2–3 weeks)
+*Goal: Build the foundational primitives every other component depends on.*
 
-- [ ] `InventoryGrid`
-  - Slot-based item grid
-  - Rarity glow / border colors
-  - Selection cursor, hover state
-  - Stack counts and item icons
-- [ ] `ShopPanel`
-  - Buy / sell tabs
-  - Item list with prices
-  - Player currency display
-  - Quantity stepper
-- [ ] `SaveFileCard`
-  - Save slot card with preview (chapter, play time, level)
-  - Empty / new slot state
-  - Selected / hover states
-- [ ] `WorldMapMarker`
-  - Animated quest / objective marker
-  - Configurable icon, color, pulse
-  - Tooltip on focus/hover
+- [ ] `GemButton`
+  - Gem-styled button with press animation (reuses `diorama-gem` CSS)
+  - Variants: `gold`, `ruby`, `sapphire`, `emerald`
+  - Sizes: `sm`, `md`, `lg`
+  - Loading state with crystal spinner
+  - Disabled state (dimmed gem)
+- [ ] `PixelText`
+  - Text with pixel font (`Press Start 2P`)
+  - Configurable size, color, weight
+  - Optional typewriter child animation
+  - Props: `variant` (`body`, `caption`, `label`, `heading`)
+- [ ] `DisplayText`
+  - Display serif font (`Cinzel`) for titles/headings
+  - Gold accent underline option
+  - Sizes: `h1` through `h6`
+- [ ] `OrnateDivider`
+  - Decorated horizontal rule with gem/rune ornament in center
+  - Variants: `gold` (default), `ruby`, `sapphire`, `emerald`
+  - Optional label text centered on the divider
+- [ ] `RuneIcon`
+  - Small inline rune/glyph icons (CSS/unicode, no icon lib dependency)
+  - Built-in rune set: sword, shield, potion, star, heart, arrow-up/down, etc.
+  - Color tinting via `accent` prop
+- [ ] `PortraitAvatar`
+  - Character portrait in a framed inset with border glow by rarity
+  - Sizes: `sm`, `md`, `lg`
+  - Rarity glow: `common`, `rare`, `epic`, `legendary`
+  - Fallback placeholder when no portrait provided
 
-**Deliverable:** `v0.3.0` — four new components, all with stories and tests.
+**Deliverable:** `v0.3.0` — atomic primitives ready.
 
 ---
 
-### Phase 2 — Theming & Customization (~2–3 weeks)
-*Goal: Let users make Diorama UI feel like *their* game, not just the default style.*
+### Phase 2 — Layout & Containers (~2–3 weeks)
+*Goal: Provide structural components for composing game screens.*
+
+- [ ] `FramePanel`
+  - Base container: parchment background, gold double-border, scanlines
+  - Extends the existing `diorama-frame` CSS class
+  - Props: `padding`, `accent`, `noScanlines`
+- [ ] `SlotGrid`
+  - CSS Grid wrapper for inventory/item slots
+  - Props: `columns`, `gap`, `slotSize`
+  - Responsive column count
+- [ ] `SplitPanel`
+  - Resizable two-pane layout (e.g., equipment left, stats right)
+  - Drag handle styled as gem or rune
+  - Props: `direction` (`horizontal` | `vertical`), `initialRatio`, `minSize`
+- [ ] `TabSelector`
+  - JRPG-style tabs with slide animation on selection change
+  - Tabs styled as parchment flaps or gem-nubs
+  - Props: `items`, `activeTab`, `onChange`
+- [ ] `ScrollPanel`
+  - Scrollable parchment panel with faded top/bottom edges indicating more content
+  - Custom scrollbar styled as gold trim
+  - Props: `maxHeight`, `fadeEdges`
+- [ ] `AccordionTome`
+  - Expandable sections styled like a tome/book with page-flip indicator
+  - Single or multi-expand modes
+  - Props: `items` (title + content), `variant` (`book` | `scroll`)
+
+**Deliverable:** `v0.4.0` — layout primitives ready.
+
+---
+
+### Phase 3 — Data Entry / Forms (~3–4 weeks)
+*Goal: Form controls styled for JRPG menus and settings screens.*
+
+- [ ] `DioramaInput`
+  - Text input with parchment bg, gold focus ring, pixel font cursor
+  - Props: `prefix`, `suffix`, `error`, `placeholder`
+  - Variants: `default`, `filled`, `underlined`
+- [ ] `DioramaSelect`
+  - Dropdown select with gem-toggle open, parchment option list
+  - Keyboard navigable (uses `useKeyboardNavigation`)
+  - Props: `options`, `value`, `onChange`, `placeholder`
+- [ ] `ToggleGem`
+  - Toggle switch styled as glowing gem (on) / dim gem (off)
+  - Animated gem glow transition
+  - Props: `checked`, `onChange`, `accent`, `disabled`
+- [ ] `CheckboxRune`
+  - Checkbox marked with a glowing rune when checked
+  - Props: `checked`, `onChange`, `label`, `indeterminate`
+- [ ] `RadioRune`
+  - Radio group with rune-selection indicator
+  - Props: `options`, `value`, `onChange`, `direction` (`horizontal` | `vertical`)
+- [ ] `GemSlider`
+  - Range slider with gem thumb, gold track
+  - Props: `min`, `max`, `value`, `onChange`, `step`, `showValue`
+- [ ] `StatStepper`
+  - +/- stepper for stat allocation, with gem buttons
+  - Props: `value`, `onChange`, `min`, `max`, `step`
+- [ ] `DioramaForm`
+  - Form wrapper with validation errors styled as torn-parchment alerts
+  - Props: `layout` (`vertical` | `horizontal`), `labelWidth`
+  - `DioramaForm.Item` sub-component for field wrappers
+- [ ] `SearchRune`
+  - Search input with glowing-rune clear/reset button
+  - Props: `onSearch`, `placeholder`, `loading`
+  - Debounced search support
+
+**Deliverable:** `v0.5.0` — full form system.
+
+---
+
+### Phase 4 — Data Display (~3–4 weeks)
+*Goal: Display components for inventory, stats, lists, and item presentation.*
+
+- [ ] `ItemCard`
+  - Single item display: icon, name, rarity glow, stack count
+  - Props: `item` (icon, name, rarity, count), `size`, `onClick`
+- [ ] `InventoryGrid`
+  - Slot-based item grid with selection cursor, hover glow, rarity borders
+  - Props: `items`, `columns`, `selectedId`, `onSelect`, `onUse`
+  - Empty slot states with `EmptySlot` placeholder
+- [ ] `RarityBadge`
+  - Small pill showing item rarity (`Common` → `Legendary`) with color coding
+  - Props: `rarity`, `size`
+  - Rarity scale: `junk`, `common`, `uncommon`, `rare`, `epic`, `legendary`
+- [ ] `TooltipRune`
+  - Hover tooltip styled as a floating parchment scrap
+  - Props: `title`, `placement`, `trigger` (`hover` | `focus` | `click`)
+  - Animated fade-in/out
+- [ ] `PopoverPanel`
+  - Click-triggered popup panel with ornate frame
+  - Props: `content`, `title`, `placement`, `onClose`
+- [ ] `ScrollList`
+  - Vertical scrolling list with keyboard nav, selection highlight, scroll fade
+  - Props: `items`, `renderItem`, `selectedId`, `onSelect`
+  - Built-in `useKeyboardNavigation` integration
+- [ ] `SkillTree`
+  - Radial or left-to-right skill tree with connected nodes
+  - Props: `tree` (nodes + edges), `unlockedIds`, `onNodeClick`
+  - Connector lines styled as glowing rune-threads
+- [ ] `DataTable`
+  - Parchment table with sortable columns, striped rows
+  - Props: `columns`, `data`, `sortable`, `rowSelection`
+- [ ] `EmptySlot`
+  - Placeholder for empty inventory slot, empty save file, etc.
+  - Props: `label`, `icon`, `size`
+- [ ] `StatSheet`
+  - Label-value pairs for detailed stats (e.g., "ATK: 240", "DEF: 180")
+  - Props: `stats` (array of `{ label, value }`), `columns`
+- [ ] `FramedImage`
+  - Image wrapped in ornate frame, with loading skeleton
+  - Props: `src`, `alt`, `frameStyle` (`gold` | `silver` | `parchment`)
+- [ ] `GalleryCarousel`
+  - Horizontal item carousel with gem page indicators
+  - Props: `items`, `autoplay`, `interval`
+- [ ] `CalendarPanel`
+  - In-game calendar styled as an aged tome page
+  - Props: `date`, `events`, `onSelectDate`
+  - Custom era/month/day naming (e.g., "Year of the Dragon, Harvest Moon, Day 14")
+
+**Deliverable:** `v0.6.0` — rich data display system.
+
+---
+
+### Phase 5 — Feedback & Overlays (~2–3 weeks)
+*Goal: Notifications, modals, loading states, and user feedback.*
+
+- [ ] `ModalPanel`
+  - Centered parchment modal with gold frame, backdrop blur, Escape to close
+  - Props: `open`, `onClose`, `title`, `footer`, `width`
+  - Focus trap, `aria-modal`
+- [ ] `ConfirmDialog`
+  - "Are you sure?" dialog with `GemButton` confirm/cancel
+  - Props: `open`, `title`, `message`, `onConfirm`, `onCancel`, `confirmText`, `danger`
+- [ ] `ToastRune`
+  - Brief corner notification (e.g., "Item obtained!") with auto-dismiss
+  - Props: `message`, `type` (`info` | `success` | `warning` | `error`), `duration`
+  - Stacking toasts, dismissible
+  - Static method: `ToastRune.show({ message, type })`
+- [ ] `NoticeBoard`
+  - Persistent notification panel (e.g., quest updates, system messages)
+  - Props: `notices`, `onDismiss`, `maxItems`
+- [ ] `AlertBanner`
+  - Full-width banner for warnings/errors, styled as torn scroll
+  - Props: `type` (`info` | `warning` | `error` | `success`), `message`, `closable`
+- [ ] `ResultPanel`
+  - Success/failure/level-up screen with icon, title, description, action slot
+  - Props: `status` (`success` | `error` | `info` | `levelUp`), `title`, `description`, `extra`
+- [ ] `LoadingCrystal`
+  - Spinning crystal loading indicator (replaces boring spinner)
+  - Props: `size`, `tip` (loading text)
+  - Variants: `fullscreen`, `inline`, `overlay`
+- [ ] `SkeletonRune`
+  - Placeholder shimmer for loading content
+  - Props: `variant` (`text` | `rect` | `circle` | `card`), `width`, `height`
+- [ ] `ProgressTrack`
+  - Multi-segment progress bar (quest progress, download progress)
+  - Props: `percent`, `segments`, `showLabel`, `accent`
+  - Distinct visual from HP/MP bars (more ornate, segmented)
+
+**Deliverable:** `v0.7.0` — full feedback system.
+
+---
+
+### Phase 6 — Game-Specific Systems (~4–6 weeks)
+*Goal: Components built specifically for JRPG game interfaces.*
+
+- [ ] `ShopPanel`
+  - Buy/sell interface with tabs, item list, prices, currency display
+  - Props: `shopItems`, `playerGold`, `onBuy`, `onSell`
+  - Quantity stepper, confirm dialog
+- [ ] `SaveFileCard`
+  - Save slot card: chapter, playtime, level, screenshot preview
+  - Props: `saveData`, `selected`, `empty`, `onSelect`, `onDelete`
+  - Empty/new slot state
+- [ ] `WorldMapMarker`
+  - Animated map marker with pulse, tooltip, configurable icon
+  - Props: `position`, `icon`, `label`, `pulsing`, `onClick`
+- [ ] `BattleMenu`
+  - Fight / Magic / Item / Flee command ring, distinct from `CommandMenu`
+  - Props: `commands`, `onSelect`, `variant` (`ring` | `list`)
+  - Supports sub-menus (e.g., Magic → Fire / Ice / Heal)
+- [ ] `TargetSelector`
+  - Cursor-based enemy/ally selection with arrow indicator
+  - Props: `targets`, `selectedId`, `onSelect`, `mode` (`enemy` | `ally`)
+- [ ] `DamageNumber`
+  - Floating damage/heal numbers, pop up and fade, configurable color
+  - Props: `value`, `type` (`damage` | `heal` | `crit` | `miss`), `duration`
+- [ ] `TurnOrder`
+  - Horizontal row of character icons showing turn sequence with "current" highlight
+  - Props: `units`, `currentIndex`
+- [ ] `PartyPanel`
+  - Vertical party member list with HP/MP compact bars and status icons
+  - Props: `members`, `onSelect`
+- [ ] `EquipmentSlot`
+  - Single equipment slot with item icon, empty state, drag target
+  - Props: `slotType` (`weapon` | `armor` | `accessory`), `equippedItem`, `onUnequip`
+- [ ] `EquipmentPanel`
+  - Full equipment screen: weapon/armor/accessory slots around a portrait
+  - Props: `portrait`, `slots`, `stats`, `onUnequip`
+- [ ] `DialogTree`
+  - Branching dialogue system (extends `DialogueBox`) with choice injection
+  - Props: `tree`, `onChoice`, `onEnd`
+  - Supports conditions, flags, and branching
+- [ ] `QuestLog`
+  - Quest journal styled as a book with flipping pages
+  - Props: `quests`, `activeQuestId`, `onSelect`
+  - Complete/incomplete markers, progress indicators
+- [ ] `BestiaryEntry`
+  - Single monster entry: sprite, stats, flavor text, drops list
+  - Props: `monster`, `encountered` (boolean)
+
+**Deliverable:** `v0.8.0` — full game UI system.
+
+---
+
+### Phase 7 — Theming & Customization (~2–3 weeks)
+*Goal: Let users make Diorama UI feel like **their** game, not just the default style.*
 
 - [ ] Theme provider (`DioramaProvider`)
   - Override colors, fonts, border radius, shadows
@@ -106,11 +333,11 @@
   - Document Google Fonts setup
   - Provide font-free fallback styles
 
-**Deliverable:** `v0.4.0` — fully themeable library.
+**Deliverable:** `v0.9.0` — fully themeable library.
 
 ---
 
-### Phase 3 — Advanced Interactions (~3–4 weeks)
+### Phase 8 — Advanced Interactions (~3–4 weeks)
 *Goal: Add motion, sound, and deeper game-like behavior.*
 
 - [ ] Animation primitives
@@ -120,26 +347,44 @@
 - [ ] Sound hook (`useSound`)
   - Optional audio feedback on menu navigation, select, cancel
   - No audio assets bundled; users provide their own
-- [ ] Dialog sequence system
-  - Branching dialogue trees
-  - Choice prompts inside `DialogueBox`
-  - Auto-advance and timing controls
-- [ ] Form elements with JRPG styling
-  - `DioramaInput`, `DioramaButton`, `DioramaSelect`, `DioramaSlider`
+- [ ] Form elements with JRPG styling (already covered in Phase 3, enhance here)
+  - Animation polish on inputs, selects, toggles
 
-**Deliverable:** `v0.5.0` — rich interactions and animation layer.
+**Deliverable:** `v0.10.0` — rich interactions and animation layer.
 
 ---
 
-### Phase 4 — Framework Expansion & Ecosystem (~future)
+### Phase 9 — Advanced Components (~future)
+*Goal: Large, complex components for ambitious game projects.*
+
+- [ ] `CutsceneTimeline`
+  - Timeline sequencer for scripted dialog + animation events
+- [ ] `MiniMap`
+  - Corner minimap with player indicator, fog of war overlay
+- [ ] `CraftingPanel`
+  - Recipe list + ingredient slots + craft button + result animation
+- [ ] `AuctionHouse`
+  - Browse/search/bid interface for player marketplace
+- [ ] `LeaderboardTable`
+  - Ranked list with player name, score, ornate crown for #1
+- [ ] `TitleScreen`
+  - Full-screen title with animated logo, "Press Start" blink, menu options
+- [ ] `SettingsPanel`
+  - Settings with `GemSlider` (volume), `ToggleGem` (fullscreen), etc.
+- [ ] `CodexBrowser`
+  - Categorized encyclopedia with search, cross-references
+
+**Deliverable:** `v1.0.0` — mature, comprehensive UI ecosystem.
+
+---
+
+### Phase 10 — Framework Expansion & Ecosystem (~future)
 *Goal: Meet developers where they are.*
 
 - [ ] Vue wrapper package (`diorama-ui-vue`)
 - [ ] Svelte wrapper package (`diorama-ui-svelte`)
 - [ ] Figma / design asset kit
 - [ ] Community examples (RPG inventory, dialogue system, battle UI)
-
-**Deliverable:** `v1.0.0` — mature, multi-platform UI ecosystem.
 
 ---
 
@@ -192,13 +437,65 @@ To keep the project maintainable as it grows:
 ```
 src/
 ├── components/
-│   ├── DialogueBox/
-│   ├── CommandMenu/
-│   ├── StatusPanel/
+│   ├── GemButton/
+│   ├── PixelText/
+│   ├── DisplayText/
+│   ├── OrnateDivider/
+│   ├── RuneIcon/
+│   ├── PortraitAvatar/
+│   ├── FramePanel/
+│   ├── SlotGrid/
+│   ├── SplitPanel/
+│   ├── TabSelector/
+│   ├── ScrollPanel/
+│   ├── AccordionTome/
+│   ├── DioramaInput/
+│   ├── DioramaSelect/
+│   ├── ToggleGem/
+│   ├── CheckboxRune/
+│   ├── RadioRune/
+│   ├── GemSlider/
+│   ├── StatStepper/
+│   ├── DioramaForm/
+│   ├── SearchRune/
+│   ├── ItemCard/
 │   ├── InventoryGrid/
+│   ├── RarityBadge/
+│   ├── TooltipRune/
+│   ├── PopoverPanel/
+│   ├── ScrollList/
+│   ├── SkillTree/
+│   ├── DataTable/
+│   ├── EmptySlot/
+│   ├── StatSheet/
+│   ├── FramedImage/
+│   ├── GalleryCarousel/
+│   ├── CalendarPanel/
+│   ├── ModalPanel/
+│   ├── ConfirmDialog/
+│   ├── ToastRune/
+│   ├── NoticeBoard/
+│   ├── AlertBanner/
+│   ├── ResultPanel/
+│   ├── LoadingCrystal/
+│   ├── SkeletonRune/
+│   ├── ProgressTrack/
 │   ├── ShopPanel/
 │   ├── SaveFileCard/
-│   └── WorldMapMarker/
+│   ├── WorldMapMarker/
+│   ├── BattleMenu/
+│   ├── TargetSelector/
+│   ├── DamageNumber/
+│   ├── TurnOrder/
+│   ├── PartyPanel/
+│   ├── EquipmentSlot/
+│   ├── EquipmentPanel/
+│   ├── DialogTree/
+│   ├── QuestLog/
+│   ├── BestiaryEntry/
+│   ├── DialogueBox/
+│   ├── CommandMenu/
+│   └── StatusPanel/
 ├── hooks/
 │   ├── useTypewriter.ts
 │   ├── useKeyboardNavigation.ts
@@ -232,11 +529,16 @@ src/
 | Version | Focus | Key Additions |
 |---------|-------|---------------|
 | `v0.2.0` | Foundation | Tests, CI, accessibility fixes |
-| `v0.3.0` | Core JRPG UI | Inventory, Shop, Save, MapMarker |
-| `v0.4.0` | Theming | Theme provider, CSS variables, variants |
-| `v0.5.0` | Rich interactions | Animations, sound hook, forms, dialogue trees |
-| `v1.0.0` | Ecosystem | Vue/Svelte wrappers, design kit, examples |
+| `v0.3.0` | Atoms | GemButton, PixelText, DisplayText, OrnateDivider, RuneIcon, PortraitAvatar |
+| `v0.4.0` | Layout | FramePanel, SlotGrid, SplitPanel, TabSelector, ScrollPanel, AccordionTome |
+| `v0.5.0` | Forms | DioramaInput/Select/Form, ToggleGem, CheckboxRune, RadioRune, GemSlider, StatStepper, SearchRune |
+| `v0.6.0` | Data Display | ItemCard, InventoryGrid, RarityBadge, TooltipRune, PopoverPanel, ScrollList, SkillTree, DataTable, EmptySlot, StatSheet, FramedImage, GalleryCarousel, CalendarPanel |
+| `v0.7.0` | Feedback | ModalPanel, ConfirmDialog, ToastRune, NoticeBoard, AlertBanner, ResultPanel, LoadingCrystal, SkeletonRune, ProgressTrack |
+| `v0.8.0` | Game Systems | ShopPanel, SaveFileCard, WorldMapMarker, BattleMenu, TargetSelector, DamageNumber, TurnOrder, PartyPanel, EquipmentSlot/Panel, DialogTree, QuestLog, BestiaryEntry |
+| `v0.9.0` | Theming | Theme provider, CSS variables, dark/light modes, component variants |
+| `v0.10.0` | Interactions | Animations, sound hook, transitions, number tick effects |
+| `v1.0.0` | Ecosystem | Advanced components (8), Vue/Svelte wrappers, Figma kit, community examples |
 
 ---
 
-*Last updated: 2026-06-24*
+*Last updated: 2026-06-30*

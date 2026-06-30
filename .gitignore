@@ -29,5 +29,8 @@ lerna-debug.log*
 *.sln
 *.sw?
 
+# Playwright MCP
+.playwright-mcp
+
 # Testing
 coverage
